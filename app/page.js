@@ -210,8 +210,8 @@ export default function HomePage() {
       >
         <div
           style={{
-            background: 'linear-gradient(135deg, var(--bg-card) 0%, rgba(232, 197, 71, 0.06) 100%)',
-            border: '1px solid rgba(232, 197, 71, 0.2)',
+            background: 'linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 168, 67, 0.06) 100%)',
+            border: '1px solid rgba(212, 168, 67, 0.2)',
             borderRadius: 'var(--radius-xl)',
             padding: '60px 48px',
             textAlign: 'center',

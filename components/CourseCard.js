@@ -41,10 +41,29 @@ export default function CourseCard({ course, index = 0 }) {
         <div
           className="course-card-banner"
           style={{
-            background: gradient,
             position: 'relative',
           }}
         >
+          {/* Stock image */}
+          <img
+            src={course.image}
+            alt={course.title}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+
+          {/* Gradient overlay for readability */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: `linear-gradient(135deg, ${course.accent}33 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.7) 100%)`,
+          }} />
+
           {/* Decorative geometric pattern */}
           <div style={{
             position: 'absolute',
@@ -52,23 +71,14 @@ export default function CourseCard({ course, index = 0 }) {
             right: '20px',
             transform: 'translateY(-50%)',
             fontSize: '4rem',
-            opacity: 0.15,
+            opacity: 0.12,
             fontWeight: '700',
             color: course.accent,
             lineHeight: 1,
+            zIndex: 1,
           }}>
             {icon}
           </div>
-
-          {/* Accent glow */}
-          <div style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: '60px',
-            background: `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, transparent 100%)`,
-          }} />
 
           <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', width: '100%' }}>
             <span

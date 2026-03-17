@@ -96,8 +96,8 @@ export default function ExplorePage() {
               transition: 'var(--transition)',
             }}
             onFocus={(e) => {
-              e.target.style.borderColor = 'rgba(232, 197, 71, 0.4)';
-              e.target.style.boxShadow = '0 0 0 3px rgba(232, 197, 71, 0.08)';
+              e.target.style.borderColor = 'rgba(212, 168, 67, 0.4)';
+              e.target.style.boxShadow = '0 0 0 3px rgba(212, 168, 67, 0.08)';
             }}
             onBlur={(e) => {
               e.target.style.borderColor = 'var(--border)';

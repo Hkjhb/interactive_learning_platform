@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { getCourseById } from '@/lib/mockData';
+import { useToast } from '@/components/Toast';
 
 export default function CourseDetailPage() {
   const params = useParams();
@@ -12,6 +13,8 @@ export default function CourseDetailPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [expandedSections, setExpandedSections] = useState({ 'sec-1': true });
   const [enrolled, setEnrolled] = useState(course?.progress > 0);
+  const [wishlisted, setWishlisted] = useState(false);
+  const toast = useToast();
 
   if (!course) {
     return (
@@ -31,6 +34,19 @@ export default function CourseDetailPage() {
 
   const toggleSection = (id) => {
     setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleEnroll = () => {
+    setEnrolled(true);
+    toast({ message: `Successfully enrolled in "${course.title}"!`, type: 'success' });
+  };
+
+  const handleWishlist = () => {
+    setWishlisted(!wishlisted);
+    toast({
+      message: wishlisted ? 'Removed from wishlist' : `Added "${course.title}" to your wishlist`,
+      type: wishlisted ? 'info' : 'success',
+    });
   };
 
   const typeIcon = { video: '▶', quiz: '◈', project: '◎' };
@@ -161,7 +177,7 @@ export default function CourseDetailPage() {
               transition={{ delay: 0.2, duration: 0.5 }}
             >
               <div className="course-sticky-card">
-                {/* Video preview */}
+                {/* Video preview with stock image */}
                 <div style={{
                   aspectRatio: '16/9',
                   background: 'var(--bg-primary)',
@@ -174,16 +190,28 @@ export default function CourseDetailPage() {
                   position: 'relative',
                   overflow: 'hidden',
                 }}>
+                  <img
+                    src={course.image}
+                    alt={course.title}
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
                   <div style={{
                     position: 'absolute',
                     inset: 0,
-                    background: `linear-gradient(135deg, ${course.accent}08, transparent)`,
+                    background: 'rgba(0,0,0,0.35)',
                   }} />
                   <motion.div
                     className="play-btn"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
-                    style={{ background: course.accent }}
+                    style={{ background: course.accent, position: 'relative', zIndex: 1 }}
+                    onClick={() => toast({ message: 'Video preview coming soon!', type: 'info' })}
                   >
                     <span style={{ fontSize: '1.2rem', color: '#0C0C0F', marginLeft: '3px' }}>▶</span>
                   </motion.div>
@@ -193,7 +221,8 @@ export default function CourseDetailPage() {
                     left: '50%',
                     transform: 'translateX(-50%)',
                     fontSize: '0.72rem',
-                    color: 'var(--text-secondary)',
+                    color: 'rgba(255,255,255,0.8)',
+                    zIndex: 1,
                   }}>
                     Preview this course
                   </span>
@@ -218,31 +247,34 @@ export default function CourseDetailPage() {
                         />
                       </div>
                     </div>
-                    <Link
-                      href={`/lesson/${course.id}/l5`}
+                    <button
                       className="btn btn-primary"
                       style={{ width: '100%', justifyContent: 'center', backgroundColor: course.accent }}
+                      onClick={() => toast({ message: 'Resuming your lesson...', type: 'success' })}
                     >
                       Continue Learning →
-                    </Link>
+                    </button>
                   </>
                 ) : (
                   <>
                     <motion.button
                       className="btn btn-primary"
                       style={{ width: '100%', justifyContent: 'center', backgroundColor: course.accent, marginBottom: '10px' }}
-                      onClick={() => setEnrolled(true)}
+                      onClick={handleEnroll}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
                       Enroll Now
                     </motion.button>
-                    <button
+                    <motion.button
                       className="btn btn-secondary"
                       style={{ width: '100%', justifyContent: 'center' }}
+                      onClick={handleWishlist}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      Add to Wishlist
-                    </button>
+                      {wishlisted ? '♥ In Wishlist' : '♡ Add to Wishlist'}
+                    </motion.button>
                   </>
                 )}
 
@@ -377,10 +409,17 @@ export default function CourseDetailPage() {
                             transition={{ duration: 0.25 }}
                           >
                             {section.lessons.map((lesson) => (
-                              <Link
+                              <div
                                 key={lesson.id}
-                                href={`/lesson/${course.id}/${lesson.id}`}
                                 className="curriculum-lesson"
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => {
+                                  if (enrolled) {
+                                    toast({ message: `Opening "${lesson.title}"...`, type: 'info' });
+                                  } else {
+                                    toast({ message: 'Enroll first to access this lesson', type: 'warning' });
+                                  }
+                                }}
                               >
                                 <span style={{
                                   width: 28,
@@ -401,7 +440,7 @@ export default function CourseDetailPage() {
                                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', flexShrink: 0 }}>
                                   {lesson.duration}
                                 </span>
-                              </Link>
+                              </div>
                             ))}
                           </motion.div>
                         )}

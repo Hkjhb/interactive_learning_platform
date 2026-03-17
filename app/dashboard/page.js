@@ -12,7 +12,7 @@ const activityTypeConfig = {
   lesson: { icon: '▶', color: 'var(--teal)' },
   quiz: { icon: '◈', color: 'var(--gold)' },
   streak: { icon: '🔥', color: 'var(--terracotta)' },
-  cert: { icon: '◎', color: '#A855F7' },
+  cert: { icon: '◎', color: '#8B6CEF' },
 };
 
 export default function DashboardPage() {
@@ -70,7 +70,7 @@ export default function DashboardPage() {
           { icon: '🔥', value: userProfile.streak, label: 'Day Streak', color: 'var(--terracotta)' },
           { icon: '◷', value: userProfile.totalHours + 'h', label: 'Hours Learned', color: 'var(--gold)' },
           { icon: '◎', value: userProfile.completedCourses, label: 'Courses Done', color: 'var(--teal)' },
-          { icon: '⚡', value: userProfile.xp.toLocaleString(), label: 'XP Earned', color: '#A855F7' },
+          { icon: '⚡', value: userProfile.xp.toLocaleString(), label: 'XP Earned', color: '#8B6CEF' },
         ].map(({ icon, value, label, color }) => (
           <motion.div
             key={label}
@@ -167,7 +167,7 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     <Link
-                      href={`/lesson/${course.id}/l1`}
+                      href={`/courses/${course.id}`}
                       className="btn btn-secondary"
                       style={{ flexShrink: 0, padding: '8px 16px', fontSize: '0.8rem' }}
                       onClick={(e) => e.stopPropagation()}
@@ -188,7 +188,7 @@ export default function DashboardPage() {
                 marginTop: '28px',
                 padding: '24px',
                 background: 'var(--bg-card)',
-                border: '1px solid rgba(232, 197, 71, 0.2)',
+                border: '1px solid rgba(212, 168, 67, 0.2)',
                 borderRadius: 'var(--radius-lg)',
               }}
             >

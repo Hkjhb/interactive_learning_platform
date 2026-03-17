@@ -5,12 +5,14 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import ProgressRing from '@/components/ProgressRing';
 import { userProfile, courses } from '@/lib/mockData';
+import { useToast } from '@/components/Toast';
 
 const completedCourses = courses.filter((c) => c.progress === 90);
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [editing, setEditing] = useState(false);
+  const toast = useToast();
 
   return (
     <div className="container" style={{ paddingTop: '40px', paddingBottom: '80px' }}>
@@ -39,8 +41,8 @@ export default function ProfilePage() {
             </h1>
             <span style={{
               padding: '4px 14px',
-              background: 'rgba(232, 197, 71, 0.1)',
-              border: '1px solid rgba(232, 197, 71, 0.25)',
+              background: 'rgba(212, 168, 67, 0.1)',
+              border: '1px solid rgba(212, 168, 67, 0.25)',
               borderRadius: '20px',
               fontSize: '0.78rem',
               fontWeight: '700',
@@ -80,7 +82,12 @@ export default function ProfilePage() {
 
         <div style={{ display: 'flex', gap: '10px', flexShrink: 0 }}>
           <motion.button
-            onClick={() => setEditing(!editing)}
+            onClick={() => {
+              if (editing) {
+                toast({ message: 'Profile saved successfully!', type: 'success' });
+              }
+              setEditing(!editing);
+            }}
             className="btn btn-secondary"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -166,7 +173,7 @@ export default function ProfilePage() {
                 { skill: 'React & Frontend', level: 78, color: 'var(--gold)' },
                 { skill: 'Node.js & Backend', level: 45, color: 'var(--teal)' },
                 { skill: 'UI/UX Design', level: 82, color: 'var(--terracotta)' },
-                { skill: 'Data Science', level: 20, color: '#A855F7' },
+                { skill: 'Data Science', level: 20, color: '#8B6CEF' },
                 { skill: 'Mobile Development', level: 33, color: 'var(--amber)' },
               ].map(({ skill, level, color }, i) => (
                 <motion.div
@@ -262,7 +269,7 @@ export default function ProfilePage() {
                         background: today
                           ? 'var(--gold)'
                           : active
-                          ? 'rgba(232, 197, 71, 0.25)'
+                          ? 'rgba(212, 168, 67, 0.25)'
                           : 'var(--bg-primary)',
                         border: today ? 'none' : '1px solid var(--border)',
                         display: 'flex',
@@ -397,6 +404,7 @@ export default function ProfilePage() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
+                  onClick={() => toast({ message: 'Preparing certificate download...', type: 'info' })}
                   style={{
                     padding: '8px 18px',
                     background: `${course.accent}18`,

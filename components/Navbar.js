@@ -85,16 +85,18 @@ export default function Navbar() {
               🔥 12
             </motion.div>
 
-            <motion.div
-              className="navbar-avatar"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.45 }}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              AM
-            </motion.div>
+            <Link href="/profile">
+              <motion.div
+                className="navbar-avatar"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.45 }}
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                AM
+              </motion.div>
+            </Link>
 
             {/* Mobile Menu Button */}
             <button

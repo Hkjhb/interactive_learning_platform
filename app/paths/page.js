@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import PageTransition from '@/components/PageTransition';
+import { useToast } from '@/components/Toast';
 
 const paths = [
   {
@@ -137,6 +139,8 @@ const paths = [
 export default function PathsPage() {
   const [selected, setSelected] = useState(null);
   const [filter, setFilter] = useState('all');
+  const router = useRouter();
+  const toast = useToast();
 
   const filterOptions = [
     { id: 'all', label: 'All Paths' },
@@ -511,6 +515,17 @@ export default function PathsPage() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.97 }}
+                  onClick={() => {
+                    if (activePath.courseList.length > 0) {
+                      toast({
+                        message: activePath.progress > 0
+                          ? `Continuing "${activePath.title}"...`
+                          : `Starting "${activePath.title}"!`,
+                        type: 'success',
+                      });
+                      router.push(`/courses/${activePath.courseList[0].id}`);
+                    }
+                  }}
                   style={{
                     width: '100%',
                     padding: '13px',

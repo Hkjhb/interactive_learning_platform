@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageTransition from '@/components/PageTransition';
+import { useToast } from '@/components/Toast';
 
 function Toggle({ value, onChange, accent = 'var(--gold)' }) {
   return (
@@ -129,10 +130,25 @@ export default function SettingsPage() {
   // Goal
   const [weeklyGoal, setWeeklyGoal] = useState(10);
   const [reminderTime, setReminderTime] = useState('19:00');
+  const toast = useToast();
+  const [confirmAction, setConfirmAction] = useState(null);
+
+  // Store original values for cancel
+  const [origName] = useState('Alex Morgan');
+  const [origEmail] = useState('alex.morgan@email.com');
+  const [origTitle] = useState('Full Stack Developer');
 
   const handleSave = () => {
     setSaved(true);
+    toast({ message: 'Settings saved successfully!', type: 'success' });
     setTimeout(() => setSaved(false), 2500);
+  };
+
+  const handleCancel = () => {
+    setName(origName);
+    setEmail(origEmail);
+    setTitle(origTitle);
+    toast({ message: 'Changes discarded', type: 'info' });
   };
 
   const sections = [
@@ -247,7 +263,7 @@ export default function SettingsPage() {
                         AM
                       </div>
                       <div>
-                        <button style={{
+                        <button onClick={() => toast({ message: 'Photo upload coming soon!', type: 'info' })} style={{
                           padding: '7px 16px',
                           background: 'var(--bg-card-hover)',
                           border: '1px solid var(--border-light)',
@@ -306,7 +322,7 @@ export default function SettingsPage() {
                       >
                         {saved ? '✓ Saved!' : 'Save Changes'}
                       </motion.button>
-                      <button className="btn btn-ghost">Cancel</button>
+                      <button className="btn btn-ghost" onClick={handleCancel}>Cancel</button>
                     </div>
                   </div>
                 </SectionCard>
@@ -478,6 +494,7 @@ export default function SettingsPage() {
 
                   <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid var(--border)' }}>
                     <button
+                      onClick={() => toast({ message: 'Preparing your data export...', type: 'info' })}
                       style={{
                         padding: '9px 20px',
                         background: 'transparent',
@@ -525,6 +542,15 @@ export default function SettingsPage() {
                         <motion.button
                           whileHover={{ scale: 1.03 }}
                           whileTap={{ scale: 0.97 }}
+                          onClick={() => {
+                            if (confirmAction === btnLabel) {
+                              toast({ message: label === 'Reset learning progress' ? 'Progress has been reset' : 'Account deletion requested', type: label === 'Reset learning progress' ? 'warning' : 'error' });
+                              setConfirmAction(null);
+                            } else {
+                              setConfirmAction(btnLabel);
+                              toast({ message: `Click "${btnLabel}" again to confirm`, type: 'warning' });
+                            }
+                          }}
                           style={{
                             padding: '8px 18px',
                             background: 'transparent',
@@ -538,7 +564,7 @@ export default function SettingsPage() {
                             flexShrink: 0,
                           }}
                         >
-                          {btnLabel}
+                          {confirmAction === btnLabel ? `Confirm ${btnLabel}` : btnLabel}
                         </motion.button>
                       </div>
                     ))}
