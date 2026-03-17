@@ -1,8 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/explore/page": "app/explore/page.js",
-  "/paths/page": "app/paths/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/profile/page": "app/profile/page.js",
-  "/settings/page": "app/settings/page.js"
-}
